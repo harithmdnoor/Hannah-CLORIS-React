@@ -114,6 +114,7 @@ export default StyleSheet.create ({
       borderRadius:15,
       flexDirection:"column",
       padding:10,
+      marginTop:20,
       marginHorizontal:10,
       flexWrap:"wrap",
     }
