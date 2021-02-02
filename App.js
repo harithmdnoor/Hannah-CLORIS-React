@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { Component, useState } from 'react';
-import { Text, Image, View, TouchableOpacity, TextInput, Linking } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, Image, View, TouchableOpacity,ActivityIndicator, FlatList, TextInput, Linking } from 'react-native';
 import logo from "./assets/icon_white.png";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -8,6 +8,7 @@ import styles from "./styles.js";
 import { Button, ThemeProvider } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as Speech from 'expo-speech';
+import { render } from 'react-dom';
 
 
 
@@ -22,9 +23,10 @@ function HomeScreen({navigation}) {
   
     return(
       <View style={styles.container}>
-         <View style={styles.bars}>
+        <View style={{flex:3}}></View>
+         {/* <View style={styles.bars}>
               <Icon name="bars" size={50} color="white" onPress = {() =>navigation.navigate("Settings") }/>
-          </View>
+          </View> */}
       <View style={styles.topPadding}></View>
       <Text style={styles.titleText}>CYBER SECURITY PRO</Text>
       <Image style={styles.mainLogo} source={logo}/>
@@ -52,43 +54,98 @@ function HomeScreen({navigation}) {
 
 function ResultsScreen({route,navigation}){
   const { query } = route.params;
-  var url = "https://hannah-cloris.com/?Category=&ConceptName="+query;
-  var x;
-  async function loadGraphicCards() {
-    const response = await fetch(url);   // fetch page
-    const htmlString = await response.text();  // get response text
-    
-  }
-  fetch(url).then((resp)=>{ return resp.text() }).then(()=>{ x })
-  console.log(x);
-  const text = "In cybersecurity, a Trojan or Trojan Horse is a set of code that disguises itself as a legitimate program. When activated by a victim, the malicious part of the code will reside in the victim's computer memory and perform malicious acts such as deleting files or stealing information and send back to its creator." 
-  
-
+  var url = "https://dummyapi.io/data/api/user"
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  var concept;
+  useEffect(() => {
+    fetch(url,{
+      method:"GET",
+      headers:{
+        'app-id':'6019aca373dd394dbc5c43e5'
+      },
+    }).then((response) => response.json())
+    .then((json) => setData(json.data))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+  }, []);
+  data.forEach(element => {
+    if (element.firstName == query){
+      concept = element
+    }
+  });
   return(
-      <View style={styles.container}>
-        <View style={[{alignItems:'center', flexDirection:'row' }]}>
-            <Icon name="arrow-left" size={50} style={[{marginRight:'auto'}]} color="white" onPress = {() => navigation.navigate('Home')}/>
-            <Icon name="volume-up" size={50} style={[{marginLeft:'auto'}]} color="white" onPress ={()=>Speech.speak(text)}/>
-        </View>
-      <View style={styles.topPadding}></View>
-      <Text style={styles.resultTitle}>{query}</Text>
-      <View style={styles.middleRow}>
-        <View style={styles.resultBackground}>
-          <Text style={styles.resultText}>{text}</Text>
-        </View>
-        <TouchableOpacity style= {styles.submitButton}
-               onPress = {() => {Linking.openURL({url}.url)}}>
-                 <Text style = {styles.submitButtonText}> See More </Text>
-               </TouchableOpacity>
-      </View>
-      <View style={styles.bottomPadding}></View>
-    </View>
-    
+    <View style={{backgroundColor:'#663399',flex:2}}>
+            <View style={styles.resultContainer}>
+              <View style={{flex:1,paddingLeft:15}}>
+              <Icon name="arrow-left" size={50} color="white"  onPress = {() => navigation.navigate('Home')}/>
+              </View>
+              <View style={styles.buttonContainer}></View>
+              <View style={styles.buttonContainer}></View>
+              <View style={styles.buttonContainer}></View>
+              <View style={styles.buttonContainer}></View>
+              <View style={styles.buttonContainer}>
+              <Icon name="volume-up" size={50}  color="white" onPress ={()=>Speech.speak(concept.lastName)}/>
+              </View>
+            </View>
+            <View style={{flex:2,alignItems: 'center',justifyContent: 'center'}}>
+            <View style={styles.topPadding}></View>
+            <Text style={styles.resultTitle}>{query}</Text>
+            <View style={styles.middleRow}>
+              <View style={styles.resultBackground}>
+              {isLoading ? <ActivityIndicator/> : (<Text> {concept.lastName}</Text>)}
+                </View>
+              <TouchableOpacity style= {styles.submitButton}
+                      onPress = {() => navigation.navigate('ShowMore',{object:concept})}>
+                        <Text style = {styles.submitButtonText}> See More </Text>
+                      </TouchableOpacity>
+          </View>
+          <View style={styles.bottomPadding}></View></View>
+          </View>
     )
 }
+function ShowMoreScreen({route,navigation}){
+  const { object } = route.params;
+
+  return(
+    <View style={{backgroundColor:"#663399",flex:2}}>
+       <View style={styles.resultContainer}>
+          <View style={{flex:1,paddingLeft:15}}>
+            <Icon name="arrow-left" size={50} color="white"  onPress = {() => navigation.navigate('Results')}/>
+          </View>
+      </View>
+      <View style={{flex:1}}></View>
+      <View style={{alignItems: 'center',justifyContent: 'center'}}>
+        <Text style={styles.resultTitle}>{object.firstName}</Text>
+      </View>
+      <View style={{flex:4}}>
+        <View style={styles.showMoreCards}>
+          <Text style={{}}>{object.lastName}</Text>
+        </View>
+        <View style={styles.showMoreCards}>
+          <Text>{object.title}</Text>
+        </View>
+        <View style={styles.showMoreCards}>
+          <Text>{object.email}</Text>
+        </View>
+        <View style={styles.showMoreCards}>
+          <Text>{object.id}</Text>
+        </View>
+        <View style={styles.showMoreCards}>
+          <Text>{object.picture}</Text>
+        </View>
+        <View style={styles.showMoreCards}>
+          <Text>{object.firstName}</Text>
+        </View>
+        
+      </View>
+    </View>
+  );
+}
+
 function SettingScreen({navigation}){
   return(
-    <View style={styles.container}>
+    <View style={styles.container}> 
        <View style={styles.bars}>
             <Icon name="arrow-left" size={50} color="white" onPress = {() => navigation.navigate('Home')}/>
         </View>
@@ -109,6 +166,7 @@ function App() {
         <Stack.Screen name="Home" component={HomeScreen} options={{headerShown:false}}/>
         <Stack.Screen name="Results" component={ResultsScreen} options={{headerShown:false}}/>
         <Stack.Screen name="Settings" component={SettingScreen} options={{headerShown:false}}/>
+        <Stack.Screen name="ShowMore" component={ShowMoreScreen} options={{headerShown:false}}/>
 
       </Stack.Navigator>
     </NavigationContainer>

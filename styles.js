@@ -36,23 +36,50 @@ export default StyleSheet.create ({
       width:300,
       borderRadius:15
     },
+    resultContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#663399',
+    },
+    buttonContainer: {
+      flex: 1,
+    },
     submitButton: {
       flexDirection: "row",
       backgroundColor:"white",
       marginHorizontal:100,
+      marginVertical:20,
       height: 40,
       borderRadius:15,
+      borderColor:"grey",
+      borderWidth:3,
       alignItems:"center",
-      justifyContent:"center"
+      justifyContent:"center",
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.5,
+      shadowRadius: 2,
+      elevation: 2
     },
     submitButtonText:{
       color: 'black',
     },
+    iconView:{
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    icon:{
+      flex:1
+    },
     topPadding:{
-      flex:2
+      flex:1
     },
     middleRow:{
-      flex:1
+      flex:3
     },
     bottomPadding:{
       flex:6
@@ -65,24 +92,30 @@ export default StyleSheet.create ({
       borderRadius:15,
       flexDirection:"row",
       padding:10,
-      marginHorizontal:10
+      marginHorizontal:10,
+      flexWrap:"wrap",
     },
     resultTitle:{
       fontSize: 20,
       fontWeight: "bold",
       color: "white",
       paddingBottom:10,
+      alignItems:"center",
       textTransform:"uppercase"
-    },
-    arrowUp:{
-    },
-    volumeUp:{
     },
     bars:{
       alignSelf: 'flex-start',
       marginTop: 15,
       padding:15,
       paddingTop:30
+    },
+    showMoreCards:{
+      backgroundColor:"white",
+      borderRadius:15,
+      flexDirection:"column",
+      padding:10,
+      marginHorizontal:10,
+      flexWrap:"wrap",
     }
   });
   

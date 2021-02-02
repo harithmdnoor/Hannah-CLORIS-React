@@ -8,6 +8,10 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
+      "ios": {
+        "bundleIdentifier": "com.HannahCloris.Harith",
+        "buildNumber": "1.0.0"
+      },
       "backgroundColor": "#ffffff"
     },
     "updates": {
