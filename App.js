@@ -8,7 +8,7 @@ import styles from "./styles.js";
 import { Button, ThemeProvider } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as Speech from 'expo-speech';
-import { render } from 'react-dom';
+import HTML from "react-native-render-html";
 
 
 
@@ -54,24 +54,23 @@ function HomeScreen({navigation}) {
 
 function ResultsScreen({route,navigation}){
   const { query } = route.params;
-  var url = "https://dummyapi.io/data/api/user"
+  var url = "https://hannah-cloris.azurewebsites.net/api/Concepts"
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   var concept;
   useEffect(() => {
     fetch(url,{
-      method:"GET",
-      headers:{
-        'app-id':'6019aca373dd394dbc5c43e5'
-      },
-    }).then((response) => response.json())
-    .then((json) => setData(json.data))
+      method:"GET"})
+      .then((response) => response.json())
+      .then((json) => setData(json))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
+  console.log(data.toString());
   data.forEach(element => {
-    if (element.firstName == query){
-      concept = element
+    if((element.name.toUpperCase()).includes(query.toUpperCase())){
+      console.log(element);
+      concept=element;
     }
   });
   return(
@@ -85,7 +84,7 @@ function ResultsScreen({route,navigation}){
               <View style={styles.buttonContainer}></View>
               <View style={styles.buttonContainer}></View>
               <View style={styles.buttonContainer}>
-              <Icon name="volume-up" size={50}  color="white" onPress ={()=>Speech.speak(concept.lastName)}/>
+              <Icon name="volume-up" size={50}  color="white" onPress ={()=>Speech.speak(concept.description)}/>
               </View>
             </View>
             <View style={{flex:2,alignItems: 'center',justifyContent: 'center'}}>
@@ -93,7 +92,7 @@ function ResultsScreen({route,navigation}){
             <Text style={styles.resultTitle}>{query}</Text>
             <View style={styles.middleRow}>
               <View style={styles.resultBackground}>
-              {isLoading ? <ActivityIndicator/> : (<Text> {concept.lastName}</Text>)}
+              {isLoading ? <ActivityIndicator/> : (<HTML source={{ html: concept.description }}/>)}
                 </View>
               <TouchableOpacity style= {styles.submitButton}
                       onPress = {() => navigation.navigate('ShowMore',{object:concept})}>
@@ -116,27 +115,22 @@ function ShowMoreScreen({route,navigation}){
       </View>
       <View style={{flex:1}}></View>
       <View style={{alignItems: 'center',justifyContent: 'center'}}>
-        <Text style={styles.resultTitle}>{object.firstName}</Text>
+        <Text style={styles.resultTitle}>{object.name}</Text>
       </View>
       <View style={{flex:4}}>
-        <View style={styles.showMoreCards}>
-          <Text style={{}}>{object.lastName}</Text>
+      <View style={styles.showMoreCards}>
+          <TouchableOpacity><Text>Purpose</Text></TouchableOpacity>
         </View>
         <View style={styles.showMoreCards}>
-          <Text>{object.title}</Text>
+          <TouchableOpacity><Text>Analogy</Text></TouchableOpacity>
         </View>
         <View style={styles.showMoreCards}>
-          <Text>{object.email}</Text>
+          <TouchableOpacity><Text>How It Works</Text></TouchableOpacity>
         </View>
         <View style={styles.showMoreCards}>
-          <Text>{object.id}</Text>
+          <TouchableOpacity><Text>Links</Text></TouchableOpacity>
         </View>
-        <View style={styles.showMoreCards}>
-          <Text>{object.picture}</Text>
-        </View>
-        <View style={styles.showMoreCards}>
-          <Text>{object.firstName}</Text>
-        </View>
+       
         
       </View>
     </View>
