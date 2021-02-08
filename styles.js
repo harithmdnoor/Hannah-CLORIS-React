@@ -65,6 +65,7 @@ export default StyleSheet.create ({
     },
     submitButtonText:{
       color: 'black',
+      fontSize:20
     },
     iconView:{
       flex: 1,
@@ -88,6 +89,13 @@ export default StyleSheet.create ({
       color:"black"
     },
     resultBackground:{
+      backgroundColor:"white",
+      flexDirection:"row",
+      flexWrap:"wrap",
+      paddingRight:20,
+      paddingLeft:10
+    },
+    resultBackground2:{
       backgroundColor:"white",
       borderRadius:15,
       flexDirection:"row",
@@ -117,6 +125,17 @@ export default StyleSheet.create ({
       marginTop:20,
       marginHorizontal:10,
       flexWrap:"wrap",
+      flexDirection: "row",
+      backgroundColor:"white",
+      height: 50,
+      borderRadius:15,
+      alignItems:"center",
+      justifyContent:"center",
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.5,
+      shadowRadius: 2,
+      elevation: 2
     }
   });
   
